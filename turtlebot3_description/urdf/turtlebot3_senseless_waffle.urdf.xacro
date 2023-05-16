@@ -4,12 +4,15 @@
   <xacro:include filename="$(find turtlebot3_description)/urdf/turtlebot3_senseless_waffle.gazebo.xacro"/>
   <xacro:arg name="tf_prefix"     default=""/>
 
-  <xacro:property name="tf_prefix" value="$(arg tf_prefix)"/>
+  <!-- <xacro:property name="tf_prefix" value="$(arg tf_prefix)"/> -->
   <xacro:property name="base_footprint_frame" value="base_footprint"/>
 
-  <xacro:if value="${tf_prefix != ''}">
-    <xacro:property name="base_footprint_frame" value="${tf_prefix}/${base_footprint_frame}"/>
+  <!-- <xacro:if value="${tf_prefix != ''}">
+    <xacro:property name="base_footprint_frame" value="${tf_prefix}/${base_footprint_frame_base_name}"/>
   </xacro:if>
+  <xacro:if value="${tf_prefix == ''}">
+    <xacro:property name="base_footprint_frame" value="${base_footprint_frame_base_name}"/>
+  </xacro:if> -->
 
   <link name="${base_footprint_frame}"/>
 

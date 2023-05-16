@@ -1,16 +1,24 @@
 <?xml version="1.0"?>
 <robot name="turtlebot3_senseless_waffle_sim" xmlns:xacro="http://ros.org/wiki/xacro">
-  <xacro:arg name="imu_visual"    default="false"/>
-  <xacro:arg name="mu_value"      default="20"/>
-  <xacro:arg name="tf_prefix"     default=""/>
+  <xacro:arg name="imu_visual"  default="false"/>
+  <xacro:arg name="mu_value"    default="20"/>
+  <xacro:arg name="tf_prefix"   default=""/>
 
   <xacro:property name="tf_prefix" value="$(arg tf_prefix)"/>
-  <xacro:property name="odom_frame" value="odom"/>
-  <xacro:property name="robot_base_frame" value="base_footprint"/>
+  <xacro:property name="odom_frame_base_name" value="odom"/>
+  <xacro:property name="robot_base_frame_base_name" value="base_footprint"/>
+  <xacro:property name="imu_link_frame_base_name" value="imu_link"/>
 
   <xacro:if value="${tf_prefix != ''}">
-    <xacro:property name="robot_base_frame" value="${tf_prefix}/${robot_base_frame}"/>
-    <xacro:property name="odom_frame" value="${tf_prefix}/${odom_frame}"/>
+    <xacro:property name="odom_frame" value="${tf_prefix}/${odom_frame_base_name}"/>
+    <xacro:property name="robot_base_frame" value="${tf_prefix}/${robot_base_frame_base_name}"/>
+    <xacro:property name="imu_body_name" value="${tf_prefix}/${imu_link_frame_base_name}"/>
+  </xacro:if>
+
+  <xacro:if value="${tf_prefix == ''}">
+    <xacro:property name="odom_frame" value="${odom_frame_base_name}"/>
+    <xacro:property name="robot_base_frame" value="${robot_base_frame_base_name}"/>
+    <xacro:property name="imu_body_name" value="${imu_link_frame_base_name}"/>
   </xacro:if>
 
   <gazebo reference="base_link">
@@ -97,8 +105,8 @@
   <gazebo>
     <plugin name="imu_plugin" filename="libgazebo_ros_imu.so">
       <alwaysOn>true</alwaysOn>
-      <bodyName>imu_link</bodyName>
-      <frameName>imu_link</frameName>
+      <bodyName>${imu_link_frame_base_name}</bodyName>
+      <frameName>${imu_body_name}</frameName>
       <topicName>imu</topicName>
       <serviceName>imu_service</serviceName>
       <gaussianNoise>0.0</gaussianNoise>
